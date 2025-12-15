@@ -39,7 +39,7 @@ function App() {
   errorElement:<NotFound/>,
   children:[
     {index:true,element:<DashBoard/>},
-     {path:"recipes",element:<RecipesList/>},
+     {path:"receipes",element:<RecipesList/>},
       {path:"recipe-data",element:<ReceipeData/>},
        {path:"categories",element:<CategoriesList/>},
         {path:"category-data",element:<CategoryData/>},
