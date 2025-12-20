@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import logoSidebar from "../../../assets/images/logo_sidebar.png"
+import { useContext } from 'react';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function SideBar() {
-    const [isCollapsed,setIsCollapsed]=useState(false);
+export default function SideBar({isCollapsed,setIsCollapsed}) {
+    // const [isCollapsed,setIsCollapsed]=useState(false);
+    const{logOut}=useContext(AuthContext);
     const toggleCollapse=()=>{
         setIsCollapsed(!isCollapsed);
     }
@@ -22,7 +24,7 @@ export default function SideBar() {
           <MenuItem component={<Link to="/dashboard/categories" />}  icon ={<i className='fa fa-home'></i>}> Categories </MenuItem>
              <MenuItem component={<Link to="/dashboard/users" />} icon ={<i className="fa-solid fa-users"></i>}> Users </MenuItem>
                 <MenuItem icon={<i className="fa-solid fa-lock"></i>}> Change Password </MenuItem>
-                   <MenuItem icon ={<i className="fa-solid fa-arrow-right-from-bracket"></i>}> Logout </MenuItem>
+                   <MenuItem onClick={logOut}  component={<Link to="/" />}  icon={<i className="fa-solid fa-arrow-right-from-bracket"></i>}> Logout </MenuItem>
   </Menu>
 </Sidebar>;
     </div>

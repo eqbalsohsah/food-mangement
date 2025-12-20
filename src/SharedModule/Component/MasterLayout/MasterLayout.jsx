@@ -1,22 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import NavBar from '../NavBar/NavBar'
 import { Outlet } from 'react-router-dom'
-
 import Header from '../Header/Header'
 import SideBar from '../SideBar/Sidebar'
 
+
 export default function MasterLayout() {
+    const [isCollapsed,setIsCollapsed]=useState(false);
   return (
     <div>
-      <div className='d-flex vh-100 '>
+      <div className='  d-flex  '>
         <div className=' '>
           {/* <Sidebar/> */}
-          <SideBar/>
+          <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed}/>
         </div>
-        <div className='w-100  m-3'>
+        <div className={`content ${isCollapsed?" collapsed":""}`}>
 <NavBar/>
-<Header/>
+
 <Outlet/>
         </div>
 

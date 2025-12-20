@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../../Context/AuthContext'
 
 
 export default function Header({title,description,imgUrl}) {
+
   return (
     <>
 
-         <header className='bg-green  p-2'>
+         <header className='bg-green  p-4 rounded-4'>
       <div className="container-fluid ">
         <div className="row ">
         <div className="col-md-8  text-white ">

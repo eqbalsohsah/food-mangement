@@ -17,6 +17,10 @@ import CategoryData from './CategoriesModule/Component/CategoryData/CategoryData
 import UserList from './UserModule/Componenets/UserList/UserList'
  import { ToastContainer } from 'react-toastify';
 import MasterLayout from './SharedModule/Component/MasterLayout/MasterLayout'
+import AuthContextProvider from './Context/AuthContext'
+
+
+
 
 function App() {
   const routes=createBrowserRouter([
@@ -35,7 +39,7 @@ function App() {
     },
 {
   path:"dashboard",
- element:<MasterLayout/>,
+ element: <MasterLayout/> ,
   errorElement:<NotFound/>,
   children:[
     {index:true,element:<DashBoard/>},
@@ -53,9 +57,10 @@ function App() {
 
   return (
     <>
-
+<AuthContextProvider>
 <RouterProvider router={routes}></RouterProvider>
  <ToastContainer />
+ </AuthContextProvider>
     </>
   )
 }

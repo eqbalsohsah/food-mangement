@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../../Context/AuthContext'
 
 export default function NavBar() {
+  const{loginData}=useContext(AuthContext);
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary my-2">
@@ -12,7 +14,7 @@ export default function NavBar() {
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">upskilling</a>
+          <a className="nav-link active" aria-current="page" href="#">{loginData.userName}</a>
         </li>
 
 

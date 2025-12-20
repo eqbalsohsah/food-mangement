@@ -5,8 +5,25 @@ import axios from 'axios'
 import { useState } from 'react'
 import NoData from '../../../SharedModule/Component/NoData/NoData'
 
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation'
+import { toast } from 'react-toastify'
+
 export default function CategoriesList() {
   const[categoriesList,setCategoriesList]=useState([]);
+  const[categorId,setCategoryId]=useState(0);
+   const[categoryName,setCategoryName]=useState('');
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (category) =>
+   {
+    setCategoryId(category.id);
+    setCategoryName(category.name);
+     setShow(true);
+   }
+
 
   const getAllCategories= async()=>{
     try {
@@ -18,6 +35,21 @@ export default function CategoriesList() {
       console.log(error);
 
     }
+  }
+  const deleteCategory= async()=>{
+try {
+
+  let response=await axios.delete(`https://upskilling-egypt.com:3006/api/v1/Category/${categorId}`,
+    {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});
+    console.log(response);
+    toast.success("delete Success");
+handleClose();
+ getAllCategories();
+
+} catch (error) {
+console.log(error);
+
+}
   }
   useEffect(()=>{
     getAllCategories();
@@ -32,27 +64,61 @@ export default function CategoriesList() {
   </div>
   <button className=' btn bg-green text-white'>Add New Category</button>
 </div>
+
+
+      <Modal show={show} onHide={handleClose}>
+  <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+<DeleteConfirmation deleteItem={"Category "} name={categoryName}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-danger" onClick={deleteCategory}>
+            Delete
+          </Button>
+
+        </Modal.Footer>
+      </Modal>
+      {categoriesList.length>0?
       <table class="table table-striped ">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col"> Category Name</th>
       <th scope="col">Category creation Data</th>
+      <th>Action</th>
 
     </tr>
   </thead>
   <tbody>
-{ categoriesList.length>0 ?categoriesList.map((category)=>(
+{ categoriesList.map((category)=>(
     <tr>
       <th scope="row">{category.id}</th>
       <td>{category.name}</td>
       <td>{category.creationDate}</td>
+      <td>
+            <div className="dropdown">
+      <span
+        data-bs-toggle="dropdown"
+        style={{ cursor: "pointer", fontSize: "20px" }}
+      >
+       <i class="fa-solid fa-ellipsis"></i>
+      </span>
+
+      <ul className="dropdown-menu">
+        <li className="dropdown-item"> <i class="fa-regular fa-eye text-green"></i>View</li>
+        <li className="dropdown-item"> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
+        <li className="dropdown-item " onClick={()=>handleShow(category)}> <i class="fa-solid fa-trash text-green" ></i>Delete</li>
+      </ul>
+    </div>
+      </td>
 
     </tr>
-)) : <NoData/>}
+)) }
 
      </tbody>
-</table>
+</table>:<NoData/>}
     </div>
   )
 }
