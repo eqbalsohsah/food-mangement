@@ -10,7 +10,7 @@ export default function DashBoard() {
   const navigate=useNavigate();
   return (
     <div>
-    <Header title={`Welcome ${loginData.userName}`} description={"This is a welcoming screen for the entry of the application , you can now see the options"}  imgUrl={headerImg}/>
+    <Header title={`Welcome ${loginData?.userName}`} description={"This is a welcoming screen for the entry of the application , you can now see the options"}  imgUrl={headerImg}/>
    <div className="bg-color my-3  d-flex justify-content-between align-items-center p-3">
     <div className="caption">
       <h4>Fill the<spn className="text-green"> Recipes</spn>  !</h4>

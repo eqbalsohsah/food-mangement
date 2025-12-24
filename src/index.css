@@ -62,3 +62,30 @@ table,button{
     width: calc(100%-80px);
     transition: .5s;
 }
+button{
+    outline: none;
+    box-shadow: none ;
+}
+.header-bg{
+    position: relative;
+    overflow: hidden;
+}
+.headerSvg{
+    position: absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0 ;
+}
+.img-notfound{
+    position: relative;
+
+
+}
+.svg-notfound{
+    position: absolute;
+    inset:0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}

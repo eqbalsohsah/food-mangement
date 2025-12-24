@@ -15,7 +15,7 @@ export default function MasterLayout() {
           {/* <Sidebar/> */}
           <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed}/>
         </div>
-        <div className={`content ${isCollapsed?" collapsed":""}`}>
+        <div className={`content ${isCollapsed?" collapsed":""} w-100`}>
 <NavBar/>
 
 <Outlet/>

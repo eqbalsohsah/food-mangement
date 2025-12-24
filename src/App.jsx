@@ -18,6 +18,7 @@ import UserList from './UserModule/Componenets/UserList/UserList'
  import { ToastContainer } from 'react-toastify';
 import MasterLayout from './SharedModule/Component/MasterLayout/MasterLayout'
 import AuthContextProvider from './Context/AuthContext'
+import ProtectedRoute from './SharedModule/Component/ProtectedRoute/ProtectedRoute'
 
 
 
@@ -39,12 +40,15 @@ function App() {
     },
 {
   path:"dashboard",
- element: <MasterLayout/> ,
+ element:<ProtectedRoute><MasterLayout/></ProtectedRoute> ,
   errorElement:<NotFound/>,
   children:[
     {index:true,element:<DashBoard/>},
      {path:"receipes",element:<RecipesList/>},
       {path:"recipe-data",element:<ReceipeData/>},
+
+  {path:"recipe-data/:id?",element:<ReceipeData/>},
+
        {path:"categories",element:<CategoriesList/>},
         {path:"category-data",element:<CategoryData/>},
          {path:"users",element:<UserList/>},
@@ -57,10 +61,10 @@ function App() {
 
   return (
     <>
-<AuthContextProvider>
+
 <RouterProvider router={routes}></RouterProvider>
  <ToastContainer />
- </AuthContextProvider>
+
     </>
   )
 }

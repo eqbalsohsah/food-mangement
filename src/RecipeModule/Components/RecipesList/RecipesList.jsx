@@ -8,10 +8,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation'
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function RecipesList() {
   const BASE_URL="https://upskilling-egypt.com:3006/";
+  const navigate=useNavigate();
   const[receipesList,setReceipesList]=useState([]);
   const[receipeId,setReceipeId]=useState(0);
      const[receipeName,setReceipeName]=useState('');
@@ -68,7 +70,7 @@ handleClose();
     <h6>Recipe Table Details</h6>
     <p>You can check all details</p>
   </div>
-  <button className=' btn bg-green text-white'>Add New Item</button>
+  <button className=' btn bg-green text-white' onClick={()=>navigate('/dashboard/recipe-data')}>Add New Item</button>
 </div>
  <Modal show={show} onHide={handleClose}>
   <Modal.Header closeButton>
@@ -147,7 +149,7 @@ handleClose();
 
       <ul className="dropdown-menu ">
         <li className="dropdown-item"> <i class="fa-regular fa-eye text-green "></i>View</li>
-        <li className="dropdown-item"> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
+        <li className="dropdown-item" onClick={()=>navigate(`/dashboard/recipe-data/${receipe.id}`)}> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
         <li className="dropdown-item " onClick={()=>handleShow(receipe)}><i class="fa-solid fa-trash text-green"></i>Delete</li>
       </ul>
     </div>
