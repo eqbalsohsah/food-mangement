@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../../../SharedModule/Component/Header/Header'
 import header2 from "../../../assets/images/header2.png"
 import axios from 'axios'
@@ -9,13 +9,16 @@ import Modal from 'react-bootstrap/Modal';
 import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../../Context/AuthContext';
 
 
 export default function RecipesList() {
+ let {loginData} =useContext(AuthContext);
   const BASE_URL="https://upskilling-egypt.com:3006/";
   const navigate=useNavigate();
   const[receipesList,setReceipesList]=useState([]);
   const[receipeId,setReceipeId]=useState(0);
+    const[favId,setFavId]=useState(0);
      const[receipeName,setReceipeName]=useState('');
     const [show, setShow] = useState(false);
 
@@ -26,6 +29,17 @@ export default function RecipesList() {
       setReceipeName(receipe.name);
        setShow(true);
      }
+     ///////////////////////////addd fav
+        const [showFav, setShowFav] = useState(false);
+
+    const handleCloseFav = () => setShowFav(false);
+    const handleShowFav = (id) =>
+     {
+      setFavId(id);
+
+       setShowFav(true);
+     }
+
 
 
 
@@ -59,6 +73,25 @@ handleClose();
 }
 
   }
+  let addToFav= async()=>{
+  try {
+    let response= await axios.post(`https://upskilling-egypt.com:3006/api/v1/userRecipe/`,{"recipeId":favId},
+        {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
+    );
+
+    toast.success('recipe added success');
+    handleCloseFav();
+    console.log(response);
+
+
+  } catch (error) {
+    console.log(error);
+
+
+  }
+
+
+  }
   useEffect(()=>{
     getAllReceipes();
   },[])
@@ -70,8 +103,27 @@ handleClose();
     <h6>Recipe Table Details</h6>
     <p>You can check all details</p>
   </div>
-  <button className=' btn bg-green text-white' onClick={()=>navigate('/dashboard/recipe-data')}>Add New Item</button>
+  {loginData?.userGroup !="SystemUser"?  <button className=' btn bg-green text-white' onClick={()=>navigate('/dashboard/recipe-data')}>Add New Item</button>:""}
+
 </div>
+{/* /////////////////////////////modal fav */}
+ <Modal show={showFav} onHide={handleCloseFav}>
+  <Modal.Header closeButton>
+          <Modal.Title>
+            confirm
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+Do you to add this item to your favourites?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-danger" onClick={addToFav}>
+            Add
+          </Button>
+
+        </Modal.Footer>
+      </Modal>
+{/* end modalfav */}
  <Modal show={show} onHide={handleClose}>
   <Modal.Header closeButton>
           <Modal.Title></Modal.Title>
@@ -139,6 +191,8 @@ handleClose();
        <td>{receipe.tag.id}</td>
          <td>{receipe.tag.name}</td>
          <td>
+          {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
+          onClick={()=>handleShowFav(receipe.id)}></i>:
               <div className="dropdown">
       <span
         data-bs-toggle="dropdown"
@@ -152,7 +206,7 @@ handleClose();
         <li className="dropdown-item" onClick={()=>navigate(`/dashboard/recipe-data/${receipe.id}`)}> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
         <li className="dropdown-item " onClick={()=>handleShow(receipe)}><i class="fa-solid fa-trash text-green"></i>Delete</li>
       </ul>
-    </div>
+    </div>}
          </td>
 
 

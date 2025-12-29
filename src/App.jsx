@@ -19,6 +19,8 @@ import UserList from './UserModule/Componenets/UserList/UserList'
 import MasterLayout from './SharedModule/Component/MasterLayout/MasterLayout'
 import AuthContextProvider from './Context/AuthContext'
 import ProtectedRoute from './SharedModule/Component/ProtectedRoute/ProtectedRoute'
+import FavList from './Favourites/Components/FavList/FavList'
+import ChangePass from './AuthModule/Components/ChangePass/ChangePass'
 
 
 
@@ -36,6 +38,9 @@ function App() {
           {path:"reset-pass",element:<ResetPass/>},
            {path:"forget-pass",element:<ForgetPass/>},
             {path:"verify-account",element:<VerifyAccount/>},
+
+
+
       ]
     },
 {
@@ -52,6 +57,9 @@ function App() {
        {path:"categories",element:<CategoriesList/>},
         {path:"category-data",element:<CategoryData/>},
          {path:"users",element:<UserList/>},
+          {path:"favs",element:<FavList/>},
+           {path:"change-pass",element:<ChangePass/>},
+
 
   ]
 

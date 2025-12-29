@@ -4,13 +4,14 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { AUTH_URLS } from '../../../Constants/END_POINTS';
 
 export default function ForgetPass() {
   let{register,handleSubmit,formState:{errors}}=useForm();
   const navigate=useNavigate();
   const onSubmit= async(data)=>{
  try {
-     let response= await axios.post('https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request',data)
+     let response= await axios.post(AUTH_URLS.forget,data)
 console.log(response);
 navigate("/reset-pass");
 toast.success("Your request is being processed, please check your email");

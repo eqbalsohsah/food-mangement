@@ -7,7 +7,8 @@ import SideBar from '../SideBar/Sidebar'
 
 
 export default function MasterLayout() {
-    const [isCollapsed,setIsCollapsed]=useState(false);
+ const [isCollapsed,setIsCollapsed]=useState(false);
+
   return (
     <div>
       <div className='  d-flex  '>

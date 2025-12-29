@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import useToggle from '../../../Hooks/UseToggle';
+import { AUTH_URLS } from '../../../Constants/END_POINTS';
 
 export default function ResetPass() {
   let{register,handleSubmit,formState:{errors},watch}=useForm();
@@ -17,7 +18,7 @@ export default function ResetPass() {
   const navigate=useNavigate();
   const onSubmit= async(data)=>{
 try {
-  let response= await axios.post('https://upskilling-egypt.com:3006/api/v1/Users/Reset',data);
+  let response= await axios.post(AUTH_URLS.reset,data);
   console.log(response);
   toast.success("reset password success");
   navigate('/login');

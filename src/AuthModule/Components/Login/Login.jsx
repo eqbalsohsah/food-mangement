@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo from "../../../assets/images/logo.png"
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import useToggle from '../../../Hooks/UseToggle';
+import { AUTH_URLS } from '../../../Constants/END_POINTS';
+
 
 
 export default function Login() {
+
   let{register,formState:{errors},handleSubmit}=useForm();
   const[showPassword,togglePassword]=useToggle();
   let navigate=useNavigate();
   const onSubmit= async(data)=>{
     try {
-      let response= await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login",data);
+      let response= await axios.post(AUTH_URLS.login,data);
 localStorage.setItem("token",response.data.token);
 navigate('/dashboard');
 toast.success("login Success");

@@ -15,15 +15,17 @@ export default function AuthContextProvider({children}){
 
        }
     }
-    const logOut=()=>{
-        localStorage.removeItem("token");
-        setLoginData(null);
-    }
+
+
 useEffect(()=>{
    if(localStorage.getItem("token")){
     saveData();
    }
 },[]);
+ const logOut=()=>{
+        localStorage.removeItem("token");
+        setLoginData(null);
+    }
 
 
 return (
