@@ -24,7 +24,9 @@ setFavName(fav.recipe.name)
   const getFavList= async()=>{
     try {
        let response= await axios.get('https://upskilling-egypt.com:3006/api/v1/userRecipe/',
-         {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
+         {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}},
+
+        )
          console.log(response);
 
          setFavList(response?.data?.data);
@@ -78,8 +80,8 @@ setFavName(fav.recipe.name)
           {favList?.map((fav)=>(
         <div className='col-md-4 gy-3'>
 
-          <div className='item border text-center rounded shadow' >
-<img src={`${BASE_URL}${fav.recipe.imagePath}`}  className=' w-100'/>
+          <div className='item border text-center rounded shadow  fav_contain' >
+<div className='w-100 h-50'> <img src={`${BASE_URL}${fav.recipe.imagePath}`}  className=' w-100 fav_img'/></div>
             <h4>{fav?.recipe?.name} </h4>
             <h5>{fav?.recipe?.category[0]?.name}</h5>
             <p>{fav?.recipe?.description}</p>

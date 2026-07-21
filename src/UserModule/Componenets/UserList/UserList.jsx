@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation';
 import { toast } from 'react-toastify';
 import NoData from '../../../SharedModule/Component/NoData/NoData';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function UserList() {
 
@@ -94,7 +95,7 @@ setUserId(user.id);
   <td>{user?.email}</td>
       <td>{user?.phoneNumber}</td>
       <td>
-              <div className="dropdown">
+              {/* <div className="dropdown">
       <span
         data-bs-toggle="dropdown"
         style={{ cursor: "pointer", fontSize: "20px" }}
@@ -107,7 +108,18 @@ setUserId(user.id);
 
         <li className="dropdown-item " onClick={()=>handleShow(user)}><i class="fa-solid fa-trash text-green"></i>Delete</li>
       </ul>
-    </div>
+    </div> */}
+      <Dropdown>
+      <Dropdown.Toggle as="span" className='text-green'>
+      <i class="fa-solid fa-ellipsis fa-2x"></i>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item > <i class="fa-regular fa-eye text-green"></i>view</Dropdown.Item>
+
+        <Dropdown.Item  onClick={()=>handleShow(user)}> <i class="fa-solid fa-trash text-green" ></i>delete</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
          </td>
 
       </tr>

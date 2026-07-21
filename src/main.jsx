@@ -6,13 +6,17 @@ import "@fortawesome/fontawesome-free/css/all.min.css"
 import './index.css'
 import App from './App.jsx'
 import AuthContextProvider from './Context/AuthContext'
+import ProtectedRoute from './SharedModule/Component/ProtectedRoute/ProtectedRoute.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+
 <AuthContextProvider>
   <App />
+
 </AuthContextProvider>
+
 
 
 

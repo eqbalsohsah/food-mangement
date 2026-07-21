@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AUTH_URLS } from '../../../Constants/END_POINTS';
 
 export default function ForgetPass() {
-  let{register,handleSubmit,formState:{errors}}=useForm();
+  let{register,handleSubmit,formState:{errors,isSubmitting}}=useForm();
   const navigate=useNavigate();
   const onSubmit= async(data)=>{
  try {
@@ -69,7 +69,13 @@ toast.success("Your request is being processed, please check your email");
 {errors.email&& <div className='alert alert-danger p-2'>{errors.email.message}</div>}
 
 
-<button className='btn bg-green w-100 text-white my-2'>Submit</button>
+<button className='btn bg-green w-100 text-white my-2'>
+  {isSubmitting ?
+  <>
+  submit
+    <span className='spinner-border spinner-border-sm ms-2' role='status' aria-hidden='true'/>
+  </>:"submit"}
+</button>
             </form>
 
            </div>

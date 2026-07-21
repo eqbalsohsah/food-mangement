@@ -49,7 +49,14 @@ console.log(response);
 else{
     try {
   let response=await axios.post('https://upskilling-egypt.com:3006/api/v1/Recipe/',recipeData,
-  {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
+
+  {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}},
+  {
+  params:{
+    pageSize:6,
+    pageNumber:1
+  }
+}
 
 );
 console.log(response);
@@ -69,7 +76,9 @@ toast.success('receipe added');
   // get recipe detailsssssssssssssssssssssssssssssssssss
   const getRecipeDetails=async()=>{
    try {
-     let {data}=await axios.get(`https://upskilling-egypt.com:3006/api/v1/Recipe/${id}`,{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});
+     let {data}=await axios.get(`https://upskilling-egypt.com:3006/api/v1/Recipe/${id}`,{headers:
+      {Authorization:`Bearer ${localStorage.getItem('token')}`}
+    });
     // setReceipeDetails(response.data);
     console.log(data.imagePath);
 

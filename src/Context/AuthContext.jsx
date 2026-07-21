@@ -18,12 +18,12 @@ export default function AuthContextProvider({children}){
 
 
 useEffect(()=>{
-   if(localStorage.getItem("token")){
+   if(localStorage?.getItem("token")){
     saveData();
    }
 },[]);
  const logOut=()=>{
-        localStorage.removeItem("token");
+        localStorage?.removeItem("token");
         setLoginData(null);
     }
 

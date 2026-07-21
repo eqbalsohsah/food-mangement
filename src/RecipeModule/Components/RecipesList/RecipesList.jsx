@@ -10,17 +10,53 @@ import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmati
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../Context/AuthContext';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+import Form from 'react-bootstrap/Form';
+
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Pagination from '../../../SharedModule/Component/Pagination/Pgination';
+import "./ReceipesList.css"
 
 
 export default function RecipesList() {
  let {loginData} =useContext(AuthContext);
+   const[receipesList,setReceipesList]=useState([]);
+
+
+   ///////////////start search
+   const [searchTerm,setSearchTerm]=useState('');
+    const handelChange=(e)=>{
+    setSearchTerm(e.target.value);
+    console.log(searchTerm);
+
+
+  }
+    const filterRecipes=receipesList.filter((item)=>
+     item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+
+
+   ///////////////end search
+ /////////////////////////start pagination
+   const [currentPage, setCurrentPage] = useState(1);
+   const recipesPerPage = 8;
+     const indexOfLastReceipe= currentPage * recipesPerPage;
+   const indexOfFirstReceipe = indexOfLastReceipe - recipesPerPage;
+   const currentReceipes = filterRecipes.slice(indexOfFirstReceipe, indexOfLastReceipe);
+
+   const handlePagination = (pageNumber) => setCurrentPage(pageNumber);
+   /////////////////end pagination
   const BASE_URL="https://upskilling-egypt.com:3006/";
+
+
   const navigate=useNavigate();
-  const[receipesList,setReceipesList]=useState([]);
+
   const[receipeId,setReceipeId]=useState(0);
     const[favId,setFavId]=useState(0);
      const[receipeName,setReceipeName]=useState('');
     const [show, setShow] = useState(false);
+    const[receipeDetails,setReceipeDetails]=useState({});
 
     const handleClose = () => setShow(false);
     const handleShow = (receipe) =>
@@ -40,7 +76,15 @@ export default function RecipesList() {
        setShowFav(true);
      }
 
+///////////////////////
+ const [showView, setShowView] = useState(false);
 
+  const handleCloseView = () => setShowView(false);
+  const handleShowView =(receipe)=>{
+
+setReceipeDetails(receipe);
+     setShowView(true)
+  };
 
 
 
@@ -97,6 +141,26 @@ handleClose();
   },[])
   return (
     <>
+
+
+        <Modal show={showView} onHide={handleCloseView}>
+        <Modal.Header closeButton >
+          <Modal.Title className='text-green'>Recipe Data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+<p className='fs-5'><span className='text-green '>ReceipeName</span> :{receipeDetails?.name}</p>
+<p className='fs-5'> <span className='text-green '>ReceipePrice</span> :{receipeDetails?.price}</p>
+<p className='fs-5'> <span className='text-green '>ReceipeDescription </span>:{receipeDetails?.description}</p>
+<p className='fs-5'> <span className='text-green '>ReceipeImage </span> : <img src={`${BASE_URL}${receipeDetails?.imagePath}`}  className=' imgsize'/></p>
+        </Modal.Body>
+ <Modal.Footer>
+          <Button variant="success" onClick={handleCloseView}>
+            Close
+          </Button>
+
+        </Modal.Footer>
+
+      </Modal>
     <Header title={"Recipe Itmes!"}  description={"You can now add your items that any user can order it from the Application and you can edit"} imgUrl={header2} />
 <div className="new_item d-flex justify-content-between align-items-center my-2 bg-color p-3">
   <div>
@@ -143,7 +207,8 @@ Do you to add this item to your favourites?
   <div className="col-md-8">
       <div class="input-group mb-3">
   <span class="input-group-text" id="basic-addon1">@</span>
-  <input type="text" class="form-control" placeholder="Search..." aria-label="Username" aria-describedby="basic-addon1"/>
+  <input type="text" class="form-control" placeholder="Search..." aria-label="Username" aria-describedby="basic-addon1"
+   onChange={handelChange}  value={searchTerm}/>
 </div>
   </div>
   <div className="col-md-2">
@@ -165,7 +230,7 @@ Do you to add this item to your favourites?
 </div>
 </div>
 {receipesList.length>0?
-       <table class="table table-striped">
+       <table class="table table-striped table-responsive overflow-visible">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -174,25 +239,24 @@ Do you to add this item to your favourites?
          <th scope="col">price </th>
       <th scope="col">Description</th>
        <th scope="col">Tag</th>
-        <th scope="col">Category</th>
-        <th scope="col">action</th>
-
+        <th scope="col"> Category</th>
+        <th>action</th>
 
     </tr>
   </thead>
   <tbody>
-{ receipesList.map((receipe)=>(
-    <tr>
-      <th scope="row">{receipe.id}</th>
-      <td>{receipe.name}</td>
-   <td><img src={`${BASE_URL}${receipe.imagePath}`}  className=' imgsize'/></td>
+{ currentReceipes?.map((receipe)=>(
+    <tr key={receipe.id}>
+      <th scope="row">{receipe?.id}</th>
+      <td>{receipe?.name}</td>
+   <td className='img_animation'><img src={`${BASE_URL}${receipe?.imagePath}`}  className=' imgsize'/></td>
          <td>{receipe.price}</td>
       <td>{receipe.description}</td>
        <td>{receipe.tag.id}</td>
          <td>{receipe.tag.name}</td>
          <td>
-          {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
-          onClick={()=>handleShowFav(receipe.id)}></i>:
+          {/* {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
+          onClick={()=>handleShowFav(receipe.id)}></i> :
               <div className="dropdown">
       <span
         data-bs-toggle="dropdown"
@@ -202,11 +266,26 @@ Do you to add this item to your favourites?
       </span>
 
       <ul className="dropdown-menu ">
-        <li className="dropdown-item"> <i class="fa-regular fa-eye text-green "></i>View</li>
+        <li className="dropdown-item"> <i className="fa-regular fa-eye text-green "></i>View</li>
         <li className="dropdown-item" onClick={()=>navigate(`/dashboard/recipe-data/${receipe.id}`)}> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
         <li className="dropdown-item " onClick={()=>handleShow(receipe)}><i class="fa-solid fa-trash text-green"></i>Delete</li>
       </ul>
-    </div>}
+    </div>} */}
+    {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
+          onClick={()=>handleShowFav(receipe.id)}></i> :
+
+          <Dropdown>
+      <Dropdown.Toggle  as="span"  className='text-green' style={{cursor:"pointer",padding:0}}>
+       <i class="fa-solid fa-ellipsis fa-2x" ></i>
+
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item  onClick={()=>handleShowView(receipe)}> <i className="fa-regular fa-eye text-green "></i>view</Dropdown.Item>
+        <Dropdown.Item  onClick={()=>navigate(`/dashboard/recipe-data/${receipe.id}`)}> <i class="fa-solid fa-pen-to-square text-green"></i>update</Dropdown.Item>
+        <Dropdown.Item  onClick={()=>handleShow(receipe)}> <i class="fa-solid fa-trash text-green"></i>delete</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>}
          </td>
 
 
@@ -217,7 +296,12 @@ Do you to add this item to your favourites?
 
      </tbody>
 </table>:<NoData/>}
-
+    <Pagination
+          categoryPerPage={recipesPerPage}
+          length={filterRecipes.length}
+          handlePagination={handlePagination}
+          currentPage={currentPage}
+        />
 
     </>
   )

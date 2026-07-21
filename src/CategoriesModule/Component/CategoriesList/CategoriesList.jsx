@@ -10,17 +10,31 @@ import Modal from 'react-bootstrap/Modal';
 import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation'
 import { toast } from 'react-toastify'
 
+import Dropdown from 'react-bootstrap/Dropdown';
+import Pagination from '../../../SharedModule/Component/Pagination/Pgination'
+import "./CategoriesList.css"
+
 
 
 export default function CategoriesList() {
+  /////////////////pagination
+   const[categoriesList,setCategoriesList]=useState([]);
+   const [currentPage, setCurrentPage] = useState(1);
+  const categoryPerPage = 8;
 
+    const indexOfLastCategory = currentPage * categoryPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categoryPerPage;
+  const currentCategories = categoriesList.slice(indexOfFirstCategory, indexOfLastCategory);
+
+  const handlePagination = (pageNumber) => setCurrentPage(pageNumber);
+  /////////////
  const [value,setValue]=useState('');
  const handelChange=(e)=>{
 setValue(e.target.value);
 console.log(value);
 
  }
-  const[categoriesList,setCategoriesList]=useState([]);
+
   const[categorId,setCategoryId]=useState(0);
 
    const[categoryName,setCategoryName]=useState('');
@@ -216,13 +230,13 @@ console.log(error);
     </tr>
   </thead>
   <tbody>
-{ categoriesList.map((category)=>(
+{ currentCategories.map((category)=>(
     <tr>
       <th scope="row">{category.id}</th>
       <td>{category.name}</td>
       <td>{category.creationDate}</td>
       <td>
-            <div className="dropdown">
+            {/* <div className="dropdown">
       <span
         data-bs-toggle="dropdown"
         style={{ cursor: "pointer", fontSize: "20px" }}
@@ -235,14 +249,33 @@ console.log(error);
         <li className="dropdown-item" onClick={()=>handleShowAdd(category)}> <i class="fa-solid fa-pen-to-square text-green"></i>Edit</li>
         <li className="dropdown-item " onClick={()=>handleShow(category)}> <i class="fa-solid fa-trash text-green" ></i>Delete</li>
       </ul>
-    </div>
+    </div> */}
+       <Dropdown>
+      <Dropdown.Toggle as="span" className='text-green'>
+      <i class="fa-solid fa-ellipsis fa-2x"></i>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item > <i class="fa-regular fa-eye text-green"></i>view</Dropdown.Item>
+        <Dropdown.Item onClick={()=>handleShowAdd(category)}>  <i class="fa-solid fa-pen-to-square text-green"></i>update</Dropdown.Item>
+        <Dropdown.Item  onClick={()=>handleShow(category)}> <i class="fa-solid fa-trash text-green" ></i>delete</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
       </td>
+
+
 
     </tr>
 )) }
 
      </tbody>
 </table>:<NoData/>}
+     <Pagination
+          categoryPerPage={categoryPerPage}
+          length={categoriesList.length}
+          handlePagination={handlePagination}
+          currentPage={currentPage}
+        />
     </div>
   )
 }

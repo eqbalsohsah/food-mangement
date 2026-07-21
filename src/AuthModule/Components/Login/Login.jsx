@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext} from 'react'
 import logo from "../../../assets/images/logo.png"
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -6,23 +6,26 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import useToggle from '../../../Hooks/UseToggle';
 import { AUTH_URLS } from '../../../Constants/END_POINTS';
+import { AuthContext } from '../../../Context/AuthContext';
 
 
 
 export default function Login() {
 
-  let{register,formState:{errors},handleSubmit}=useForm();
+  let{register,formState:{errors,isSubmitting},handleSubmit}=useForm();
   const[showPassword,togglePassword]=useToggle();
   let navigate=useNavigate();
+  let{saveData}=useContext(AuthContext);
   const onSubmit= async(data)=>{
     try {
-      let response= await axios.post(AUTH_URLS.login,data);
+let response= await axios.post(AUTH_URLS.login,data);
 localStorage.setItem("token",response.data.token);
+saveData();
 navigate('/dashboard');
 toast.success("login Success");
 
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message || error);
 
     }
   }
@@ -70,7 +73,13 @@ toast.success("login Success");
   <Link to="/register" className='text-decoration-none text-black'>Register Now? </Link>
   <Link to="/forget-pass" className='text-decoration-none text-green'>Forgot Password?</Link>
 </div>
-<button className='btn bg-green w-100 text-white my-2'>Login</button>
+<button className='btn bg-green w-100 text-white my-2' disabled={isSubmitting}>
+  {isSubmitting ?<>
+  login
+    <span className='spinner-border spinner-border-sm ms-2' role='status' aria-hidden='true'/>
+  </>:"login"}
+
+  </button>
             </form>
            </div>
     </>

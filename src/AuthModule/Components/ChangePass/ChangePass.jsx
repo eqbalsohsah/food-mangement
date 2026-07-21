@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form'
 import useToggle from '../../../Hooks/UseToggle';
 import axios from 'axios';
 import { AUTH_URLS } from '../../../Constants/END_POINTS';
+import { toast } from 'react-toastify';
 
 export default function ChangePass() {
-  let{register,formState:{errors},handleSubmit,watch}=useForm();
+  let{register,formState:{errors,isSubmitting},handleSubmit,watch}=useForm();
     const [firstPassword,toggleFirstPassword]=useToggle();
      const [secondPassword,toggleSecondPassword]=useToggle();
   const[showPassword,togglePassword]=useToggle();
@@ -13,15 +14,16 @@ export default function ChangePass() {
   const onSubmit=async(data)=>{
   try {
 
-     const response=await axios.put(AUTH_URLS.ChangePassword,data,
+     const response=await axios.put('https://upskilling-egypt.com:3006/api/v1/Users/ChangePassword',data,
      {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
 
 
    )
    console.log(response);
+   toast.success("password change successfully");
 
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
 
   }
 
@@ -52,7 +54,7 @@ export default function ChangePass() {
 {/* //////////////////// */}
         <div className="input-group mb-3 ">
   <span className="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
-  <input type={firstPassword ?"text" :"password"} className="form-control" placeholder="old Password" aria-label="password" aria-describedby="basic-addon1"
+  <input type={firstPassword ?"text" :"password"} className="form-control" placeholder="new Password" aria-label="password" aria-describedby="basic-addon1"
   {...register("newPassword",{
     required:"password is required",
     minLength:{
@@ -69,7 +71,7 @@ export default function ChangePass() {
 //  */}
         <div className="input-group mb-3 ">
   <span className="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
-  <input type={secondPassword ?"text" :"password"} className="form-control" placeholder="old Password" aria-label="password" aria-describedby="basic-addon1"
+  <input type={secondPassword ?"text" :"password"} className="form-control" placeholder="confirm Password" aria-label="password" aria-describedby="basic-addon1"
   {...register("confirmNewPassword",{
     required:"password is required",
     minLength:{
@@ -89,7 +91,14 @@ export default function ChangePass() {
 
 
 
-<button className='btn bg-green text-white form-control'>change password</button>
+<button className='btn bg-green text-white form-control' disabled={isSubmitting}>
+  {isSubmitting?
+ <>
+  change password
+   <span className='spinner-border spinner-border-sm ms-2' role='status' aria-hidden='true'/>
+  </>
+  :"change password"}
+</button>
 </form>
     </div>
    </div>
