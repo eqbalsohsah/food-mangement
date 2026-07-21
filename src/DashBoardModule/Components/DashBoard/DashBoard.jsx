@@ -16,7 +16,10 @@ export default function DashBoard() {
       <h4>Fill the<spn className="text-green"> Recipes</spn>  !</h4>
       <p>Fill the Recipes !</p>
     </div>
-    <button className='  btn  bg-green text-white ' onClick={()=>navigate("/dashboard/receipes")}>Fill Recipes <i className='fa fa-arrow-right'></i></button>
+    <button className='  btn  bg-green text-white ' onClick={()=>navigate("/dashboard/receipes")}>
+
+          {loginData?.userGroup !="SystemUser"? "fill receipe":"receipes"}
+       <i className='fa fa-arrow-right'></i></button>
    </div>
     </div>
   )
