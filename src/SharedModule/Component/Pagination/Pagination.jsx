@@ -1,5 +1,5 @@
 
-import './pagination.css';
+import './Pagination.css';
 
 export default function Pagination({ categoryPerPage, length, handlePagination, currentPage }) {
   const totalPages = Math.ceil(length / categoryPerPage);
