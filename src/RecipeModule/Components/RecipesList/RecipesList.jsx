@@ -15,7 +15,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import Pagination from '../../../SharedModule/Component/Pagination/Pgination';
+import Pagination from '../../../SharedModule/Component/Pagination/Pagination';
 import "./ReceipesList.css"
 
 

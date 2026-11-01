@@ -11,7 +11,7 @@ import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmati
 import { toast } from 'react-toastify'
 
 import Dropdown from 'react-bootstrap/Dropdown';
-import Pagination from '../../../SharedModule/Component/Pagination/Pgination'
+import Pagination from '../../../SharedModule/Component/Pagination/Pagination'
 import "./CategoriesList.css"
 
 
