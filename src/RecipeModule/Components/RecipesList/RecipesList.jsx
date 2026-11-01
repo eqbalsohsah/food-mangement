@@ -107,12 +107,12 @@ try {
   let response=await axios.delete(`https://upskilling-egypt.com:3006/api/v1/Recipe/${receipeId}`,
   {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
   )
-     toast.success("delete Success");
+     toast.success(  response?.data?.data?.message||"delete Success");
 handleClose();
   getAllReceipes();
 
 } catch (error) {
-  console.log(error);
+  console.log(error?.response?.data?.data?.message  || " something wrong");
 
 }
 

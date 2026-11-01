@@ -13,15 +13,19 @@ export default function UserList() {
      const[users,setUsers]=useState([]);
       const[userName,setUserName]=useState('');
       const[userId,setUserId]=useState('');
+
        const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (user) =>{
+    console.log(user);
 
 setUserName(user.userName);
 setUserId(user.id);
     setShow(true);
   }
+
+
   const getUsers=async()=>{
     try {
 
@@ -40,7 +44,7 @@ setUserId(user.id);
     }
   }
 
-  const deleteUser=async()=>{
+  const deleteUser=async(userId)=>{
     const response= await axios.delete(`https://upskilling-egypt.com:3006/api/v1/Users/${userId}`,
        {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
 
@@ -70,11 +74,12 @@ setUserId(user.id);
         </Modal.Body>
         <Modal.Footer>
 
-          <Button variant="danger" onClick={deleteUser}>
+          <Button variant="danger" onClick={()=>deleteUser(userId)}>
           Delete
           </Button>
         </Modal.Footer>
       </Modal>
+
       {users?.length>0?
 <table class="table table-striped">
   <thead>
