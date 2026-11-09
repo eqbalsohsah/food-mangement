@@ -56,12 +56,13 @@ export default function NavBar() {
 
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarSupportedContent   ">
           <ul className="navbar-nav ms-auto ">
-            <li className="nav-item" onClick={closeNavbar}>
-              {loginData?.userName}
-            </li>
-             <li className="nav-item" onClick={closeNavbar}>
-           <img src={img} alt="profile" className='profile'/>
-            </li>
+            <li
+      className="nav-item d-flex align-items-center gap-2"
+      onClick={closeNavbar}
+    >
+      <span>{loginData?.userName}</span>
+      <img src={img} alt="profile" className="profile" />
+    </li>
             {/* لو عندك لينكات تانية، كل لينك ممكن تضيف له onClick={closeNavbar} */}
           </ul>
         </div>

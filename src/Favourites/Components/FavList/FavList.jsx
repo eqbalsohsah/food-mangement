@@ -5,12 +5,22 @@ import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DeleteConfirmation from '../../../SharedModule/Component/DeleteConfirmation/DeleteConfirmation';
+import Pagination from '../../../SharedModule/Component/Pagination/Pagination';
 
 export default function FavList() {
   ///////////////modal
    const [show, setShow] = useState(false);
    const [favId,setFavId]=useState(0);
     const [favName,setFavName]=useState('');
+     const[favList,setFavList]=useState([]);
+    /////////////////////////start pagination
+       const [currentPage, setCurrentPage] = useState(1);
+       const favsPerPage = 5;
+         const indexOfLastReceipe= currentPage * favsPerPage;
+       const indexOfFirstReceipe = indexOfLastReceipe - favsPerPage;
+       const currentFavs = favList.slice(indexOfFirstReceipe, indexOfLastReceipe);
+       const handlePagination = (pageNumber) => setCurrentPage(pageNumber);
+       /////////////////end pagination
 
   const handleClose = () => setShow(false);
   const handleShow = (fav) =>{
@@ -20,7 +30,7 @@ setFavName(fav.recipe.name)
   }
 
     const BASE_URL="https://upskilling-egypt.com:3006/";
-  const[favList,setFavList]=useState();
+
   const getFavList= async()=>{
     try {
        let response= await axios.get('https://upskilling-egypt.com:3006/api/v1/userRecipe/',
@@ -30,6 +40,8 @@ setFavName(fav.recipe.name)
          console.log(response);
 
          setFavList(response?.data?.data);
+         console.log("Favorites data:", response.data.data);
+console.log("Favorites count:", response.data.data.length);
 
   }
 
@@ -77,7 +89,7 @@ setFavName(fav.recipe.name)
     {favList?.length>0 ?
     <div className='container'>
       <div className='row '>
-          {favList?.map((fav)=>(
+          {currentFavs?.map((fav)=>(
         <div className='col-md-4 gy-3'>
 
           <div className='item border text-center rounded shadow  fav_contain' >
@@ -94,6 +106,12 @@ setFavName(fav.recipe.name)
 
     </div>
     :<NoData/>}
+       <Pagination
+              categoryPerPage={favsPerPage}
+              length={favList.length}
+              handlePagination={handlePagination}
+              currentPage={currentPage}
+            />
 
     </>
   )

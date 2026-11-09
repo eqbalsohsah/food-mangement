@@ -23,6 +23,7 @@ import Pagination from '../../../SharedModule/Component/Pagination/Pagination';
 export default function RecipesList() {
  let {loginData} =useContext(AuthContext);
    const[receipesList,setReceipesList]=useState([]);
+   const [favRecipes, setFavRecipes] = useState([]);
 
 
    ///////////////start search
@@ -68,7 +69,18 @@ export default function RecipesList() {
      }
      ///////////////////////////addd fav
         const [showFav, setShowFav] = useState(false);
+const handleFavorite = (recipe) => {
+  const favorite = favRecipes.find(
+    (item) =>
+      Number(item.recipeId ?? item.recipe?.id) === Number(recipe.id)
+  );
 
+  if (favorite) {
+    removeFav(favorite.id);
+  } else {
+    handleShowFav(recipe.id);
+  }
+};
     const handleCloseFav = () => setShowFav(false);
     const handleShowFav = (id) =>
      {
@@ -125,8 +137,10 @@ handleClose();
     );
 
     toast.success('recipe added success');
+    console.log("Recipe ID:",favId);
     handleCloseFav();
     console.log(response);
+    await getFavList();
 
 
   } catch (error) {
@@ -137,8 +151,51 @@ handleClose();
 
 
   }
+  const getFavList= async()=>{
+      try {
+         let response= await axios.get('https://upskilling-egypt.com:3006/api/v1/userRecipe/',
+           {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}},
+
+          )
+           console.log("Favorites:", response.data.data);
+
+           setFavRecipes(response?.data?.data);
+
+    }
+
+       catch (error) {
+        console.log(error);
+
+      }
+
+     }
+    const removeFav = async (favoriteId) => {
+  try {
+    let response = await axios.delete(
+      `https://upskilling-egypt.com:3006/api/v1/userRecipe/${favoriteId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
+
+    console.log("Delete response:", response.data);
+
+    // نشيل سجل المفضلة من الـ State
+    setFavRecipes((prev) =>
+      prev.filter((item) => Number(item.id) !== Number(favoriteId))
+    );
+
+    toast.success("Recipe removed from favorites");
+
+  } catch (error) {
+    console.log("Delete error:", error.response?.data || error);
+  }
+};
   useEffect(()=>{
     getAllReceipes();
+    getFavList();
   },[])
   return (
     <>
@@ -253,8 +310,8 @@ Do you to add this item to your favourites?
    <td className='img_animation'><img src={`${BASE_URL}${receipe?.imagePath}`}  className=' imgsize'/></td>
          <td>{receipe.price}</td>
       <td>{receipe.description}</td>
-       <td>{receipe.tag.id}</td>
-         <td>{receipe.tag.name}</td>
+       <td>{receipe.tag.name}</td>
+         <td>{receipe.category?.[0]?.name}</td>
          <td>
           {/* {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
           onClick={()=>handleShowFav(receipe.id)}></i> :
@@ -272,8 +329,18 @@ Do you to add this item to your favourites?
         <li className="dropdown-item " onClick={()=>handleShow(receipe)}><i class="fa-solid fa-trash text-green"></i>Delete</li>
       </ul>
     </div>} */}
-    {loginData?.userGroup =="SystemUser"? <i className='fa fa-heart mx-3 text-danger'
-          onClick={()=>handleShowFav(receipe.id)}></i> :
+    {loginData?.userGroup =="SystemUser"?<i
+  className={`fa fa-heart mx-3 ${
+    favRecipes.some(
+      item =>
+        Number(item.recipeId ?? item.recipe?.id) === Number(receipe.id)
+    )
+      ? "text-danger"
+      : "text-secondary"
+  }`}
+  onClick={() => handleFavorite(receipe)}
+  style={{ cursor: "pointer" }}
+></i> :
 
           <Dropdown>
       <Dropdown.Toggle  as="span"  className='text-green' style={{cursor:"pointer",padding:0}}>

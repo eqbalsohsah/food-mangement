@@ -81,11 +81,12 @@ toast.success('receipe added');
     });
     // setReceipeDetails(response.data);
     console.log(data.imagePath);
+     console.log( "cat",data.category);
 
  setValue("name",data?.name);
  setValue("price",data?.price);
  setValue("tagId",data?.tag?.id);
- setValue("categoriesIds",data?.category[0]?.id);
+ setValue("categoriesIds", String(data?.category?.[0]?.id));
 setPreview( BASE_URL + data.imagePath);
  setValue("description",data?.description);
 
@@ -109,8 +110,10 @@ setPreview( BASE_URL + data.imagePath);
   // getAllCategories
     const getAllCategories= async()=>{
       try {
-        let response= await  axios.get('https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1',{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});
+        let response= await  axios.get('https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=100&pageNumber=1',{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});
         setCategoriesList(response.data.data);
+        console.log("catlist",response.data.data);
+
 
 
 
@@ -131,11 +134,14 @@ setPreview( BASE_URL + data.imagePath);
       }
     }
 
-      useEffect(()=>{
-        getAllCategories();
-        getAllTags();
+     useEffect(() => {
+  getAllCategories();
+  getAllTags();
 
-      },[])
+  if (id) {
+    getRecipeDetails();
+  }
+}, [id]);
   return (
     <>
 
